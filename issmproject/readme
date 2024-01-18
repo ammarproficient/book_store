@@ -1,5 +1,5 @@
 download project 
 unzip project 
-download and install python and it's web framework flask 
+download and install python and it's web framework flask using pip install FLask 
 download sqllite db browser and install 
 run main.py
