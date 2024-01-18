@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+       <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='update_publishers.css') }}">
+</head>
+<body>
+    <h1>Update Publisher</h1>
+    <form action="/publishers/update/{{ publisher_id }}" method="POST">
+        <label>Publisher Name:</label>
+        <input type="text" name="publisher_name" value="{{ publisher[1] }}"><br>
+        <label>Publication Address:</label>
+        <input type="text" name="publication_address" value="{{ publisher[2] }}"><br>
+        <label>Publication Phone Number:</label>
+        <input type="text" name="publication_phone" value="{{ publisher[3] }}"><br>
+        <label>Publication Website:</label>
+        <input type="Website" name="publication_web" value="{{ publisher[4] }}"><br>
+        <input type="submit" value="Update Publisher">
+    </form>
+    <a href="/publishers" class="back-button">Back</a>
+</body>
+</html>

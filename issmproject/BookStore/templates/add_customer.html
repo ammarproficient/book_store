@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add_customer.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <h2><button onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/books'">Books</button></h2>
+            <h2><button onclick="window.location.href='/customers'">Customers</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+            <h2><button onclick="window.location.href='/publishers'">Publisher</button></h2>
+            <h2><button onclick="window.location.href='/login'">Login</button></h2>
+            <h2><button onclick="window.location.href='/signup'">Sign Up</button></h2>
+        </div>
+    </div>
+
+    <div class="content">
+        <h1>Add Customer</h1>
+            <form action="/customers/add" method="POST">
+                <label>Name:</label>
+                <input type="text" name="name" required><br>
+                <label>Email:</label>
+                <input type="email" name="email" required><br>
+                <label>Phone:</label>
+                <input type="tel" name="phone" required><br>
+                <input type="submit" value="Add Customer">
+            </form>
+        <br>
+            <a href="/customers" class="back-button">Back</a>
+    </div>
+</body>
+</html>
+

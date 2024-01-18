@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <h2><button onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/about'">About</button></h2>
+            <h2><button onclick="window.location.href='/publishers'">Publisher</button></h2>
+            <h2><button onclick="window.location.href='/books'">Books</button></h2>
+            <h2><button onclick="window.location.href='/customers'">Customers</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+            <h2><button onclick="window.location.href='/login'">Login</button></h2>
+            <h2><button onclick="window.location.href='/signup'">Sign Up</button></h2>
+        </div>
+    </div>
+<h1 style="text-align: center">(BOOK STORE MANAGEMENT SYSTEM)</h1>
+
+
+</body>
+</html>

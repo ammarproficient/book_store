@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='books.css') }}">
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <h2><button onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/customers'">Customers</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+            <h2><button onclick="window.location.href='/publishers'">Publisher</button></h2>
+            <div class="search-box">
+            <form action="/books/search" method="GET">
+                <label style="font-size: 16px;">Search Books:</label>
+                <input type="text" name="query" placeholder="Enter Book ID">
+                <button type="submit">Search</button>
+            </form>
+            </div>
+        </div>
+    </div>
+    <h1 style="text-align: center">Available Books</h1>
+
+    <a href="#" style="text-decoration: none; display: block; text-align: center;">
+        <button type="button" onclick="downloadPDF()" class="add-book-button" style="margin: auto;">Download Data</button>
+    </a>
+
+    <div class="books-container">
+        <table id="books-table">
+            <thead>
+                <tr>
+                    <th>Book ID</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Price</th>
+                    <th>Publication Year</th>
+                    <th>Publisher ID</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book[0] }}</td>
+                    <td>{{ book[1] }}</td>
+                    <td>{{ book[2] }}</td>
+                    <td>${{ book[3] }}</td>
+                    <td>{{ book[4] }}</td>
+                    <td><a href="/publishers/{{ book[5] }}">{{ book[5] }}</a></td>
+                    <td class="actions">
+                        <form action="/books/update/{{ book[0] }}" method="get">
+                            <button type="submit">Update</button>
+                        </form>
+                        <form action="/books/delete/{{ book[0] }}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="/books/add" class="add-book-button">Add New Book</a>
+
+<script>
+    function downloadPDF() {
+
+        const clonedTable = document.getElementById('books-table').cloneNode(true);
+
+
+        const lastColumnHeader = clonedTable.querySelector('thead th:last-child');
+        if (lastColumnHeader) {
+            lastColumnHeader.remove();
+        }
+
+        const rows = clonedTable.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const lastCell = row.lastElementChild;
+            if (lastCell) {
+                lastCell.remove();
+            }
+        });
+
+        html2pdf(clonedTable, {
+            filename: 'books.pdf',
+        });
+    }
+</script>
+</body>
+</html>

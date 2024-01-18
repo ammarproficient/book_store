@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='update_customer.css') }}">
+</head>
+<body>
+    <h1>Update Customer</h1>
+    <form action="/customers/update/{{ customer_id }}" method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" value="{{ customer[1] }}"><br>
+        <label>Email:</label>
+        <input type="email" name="email" value="{{ customer[2] }}"><br>
+        <label>Phone:</label>
+        <input type="tel" name="phone" value="{{ customer[3] }}"><br>
+        <input type="submit" value="Update Customer">
+    </form>
+    <br>
+    <a href="/customers" class="back-button">Back</a> <!-- Back button -->
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='orders.css') }}">
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <button onclick="window.location.href='/'">Home</button>
+            <button onclick="window.location.href='/books'">Books</button>
+            <button onclick="window.location.href='/customers'">Customers</button>
+            <button onclick="window.location.href='/publishers'">Publisher</button>
+            <div class="search-box">
+            <form action="/orders/search" method="GET">
+                    <label>Search Orders:</label>
+                    <input type="text" name="order_id" placeholder="Enter Order ID">
+                <button type="submit">Search</button>
+            </form>
+            </div>
+        </div>
+    </div>
+<h1 style="text-align: center">Customer Orders</h1>
+
+<a href="#" style="text-decoration: none; display: block; text-align: center;">
+    <button type="button" onclick="downloadPDF()" class="add-order-button" style="margin: auto;">Download Data</button>
+</a>
+
+    <table id="data-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer ID</th>
+                <th>Customer Name</th>
+                <th>Book Title</th>
+                <th>Quantity</th>
+                <th>Order Date</th>
+                <th>Total Order Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ order[0] }}</td>
+                <td>{{ order[1] }}</td>
+                <td>{{ order[2] }}</td>
+                <td>{{ order[3] }}</td>
+                <td>{{ order[4] }}</td>
+                <td>{{ order[5] }}</td>
+                <td>${{ order[6] }}</td>
+                <td class="actions">
+                    <form action="/orders/update/{{ order[0] }}" method="get">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/orders/delete/{{ order[0] }}" method="post">
+                        <input type="submit" value="Delete">
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <a href="/orders/add" class="add-order-button">Add New Order</a>
+
+
+
+<script>
+    function downloadPDF() {
+
+        const clonedTable = document.getElementById('data-table').cloneNode(true);
+
+
+        const lastColumnHeader = clonedTable.querySelector('thead th:last-child');
+        if (lastColumnHeader) {
+            lastColumnHeader.remove();
+        }
+
+        const rows = clonedTable.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const lastCell = row.lastElementChild;
+            if (lastCell) {
+                lastCell.remove();
+            }
+        });
+
+        html2pdf(clonedTable, {
+            filename: 'orders.pdf',
+        });
+    }
+</script>
+</body>
+</html>

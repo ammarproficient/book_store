@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='update_orders.css') }}">
+</head>
+<body>
+    <h1>Update Order</h1>
+    <form action="/orders/update/{{ order[0] }}" method="POST">
+        <label for="customer">Customer:</label>
+        <select id="customer" name="customer_id">
+            {% for customer in customers %}
+                {% if customer[0] == order[1] %}
+                    <option value="{{ customer[0] }}" selected>{{ customer[1] }}</option>
+                {% else %}
+                    <option value="{{ customer[0] }}">{{ customer[1] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br>
+
+        <label for="book">Book:</label>
+        <select id="book" name="book_id" onchange="calculatePrice()">
+            {% for book in books %}
+                {% if book[0] == order[2] %}
+                    <option value="{{ book[0] }}" data-price="{{ book[3] }}" selected>{{ book[1] }}</option>
+                {% else %}
+                    <option value="{{ book[0] }}" data-price="{{ book[3] }}">{{ book[1] }}</option>
+                {% endif %}
+            {% endfor %}
+        </select><br>
+
+        <label for="quantity">Quantity:</label>
+        <input type="number" id="quantity" name="quantity" min="1" required value="{{ order[3] }}"><br>
+
+        <label for="order_date">Order Date:</label>
+        <input type="date" id="order_date" name="order_date" required value="{{ order[4] }}"><br>
+
+        <label for="price">Order Price:</label>
+        <input type="text" id="price" name="price" readonly value="{{ order[5] }}"><br>
+
+        <input type="submit" value="Update Order">
+    </form>
+
+    <script>
+        function calculatePrice() {
+            const bookSelect = document.getElementById("book");
+            const priceInput = document.getElementById("price");
+
+            const selectedOption = bookSelect.options[bookSelect.selectedIndex];
+            const price = selectedOption.getAttribute("data-price");
+
+            priceInput.value = price;
+        }
+    </script>
+    <a href="/orders" class="back-button">Back</a> <!-- Back button -->
+</body>
+</html>

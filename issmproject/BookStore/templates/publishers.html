@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='publishers.css') }}">
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <h2><button class="home-button" onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/books'">Books</button></h2>
+            <h2><button onclick="window.location.href='/customers'">Customers</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+
+            <div class="search-form">
+                <form action="/publishers/search" method="get">
+                    <label>Search Publishers:</label>
+                    <input type="text" name="publisher_name" placeholder="Enter publisher ID">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <h1 style="text-align: center">Publisher Details</h1>
+        <a href="#" style="text-decoration: none; display: block; text-align: center;">
+    <button type="button" onclick="downloadPDF()" class="add-publisher-button" style="margin: auto;">Download Information</button>
+</a>
+
+    <div class="publishers-container">
+        <table id="publisher-table">
+            <thead>
+                <tr>
+                    <th>Publisher ID</th>
+                    <th>Publisher Name</th>
+                    <th>Publication Address</th>
+                    <th>Publication Phone Number</th>
+                    <th>Publication Website</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for publisher in publishers %}
+                <tr>
+                    <td>
+                    <a href="/publishers/{{ publisher[0] }}">{{ publisher[0] }}</a>
+                    </td>
+                    <td>{{ publisher[1] }}</td>
+                    <td>{{ publisher[2] }}</td>
+                    <td>{{ publisher[3] }}</td>
+                    <td>{{ publisher[4] }}</td>
+                    <td class="actions-form">
+                        <form action="/publishers/update/{{ publisher[0] }}" method="get">
+                            <button type="submit">Update</button>
+                        </form>
+                        <form action="/publishers/delete/{{ publisher[0] }}" method="post">
+                            <button type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a href="/publishers/add" class="add-publisher-button">Add New Publisher</a>
+<script>
+    function downloadPDF() {
+
+        const clonedTable = document.getElementById('publisher-table').cloneNode(true);
+
+
+        const lastColumnHeader = clonedTable.querySelector('thead th:last-child');
+        if (lastColumnHeader) {
+            lastColumnHeader.remove();
+        }
+
+        const rows = clonedTable.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const lastCell = row.lastElementChild;
+            if (lastCell) {
+                lastCell.remove();
+            }
+        });
+
+        html2pdf(clonedTable, {
+            filename: 'publishers.pdf',
+        });
+    }
+</script>
+</body>
+</html>
+

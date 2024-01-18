@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='add_publisher.css') }}">
+</head>
+<body>
+
+<div class="header">
+        <div class="menu">
+            <h2><button onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/books'">Books</button></h2>
+            <h2><button onclick="window.location.href='/customers'">Customers</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+            <h2><button onclick="window.location.href='/publishers'">Publisher</button></h2>
+            <h2><button onclick="window.location.href='/login'">Login</button></h2>
+            <h2><button onclick="window.location.href='/signup'">Sign Up</button></h2>
+        </div>
+    </div>
+
+    <h1>Add Publisher</h1>
+    <form action="/publishers/add" method="POST">
+        <label>Publisher Name:</label>
+        <input type="text" name="publisher_name" required><br>
+        <label>Publication Address:</label>
+        <input type="text" name="publication_address" required><br>
+        <label>Publication Phone Number:</label>
+        <input type="text" name="publication_phone" required><br>
+        <label>Publication Website:</label>
+        <input type="Website" name="publication_email" required><br>
+        <input type="submit" value="Add Publisher">
+    </form>
+    <a href="/publishers" class="back-button">Back</a>
+</body>
+</html>

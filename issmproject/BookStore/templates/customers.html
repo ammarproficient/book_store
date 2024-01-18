@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {%  if title %}
+    <title>Bookstore - {{ title }}</title>
+    {% else %}
+    <title>Bookstore</title>
+    {% endif %}
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='customers.css') }}">
+    <script src="https://rawgit.com/eKoopmans/html2pdf/master/dist/html2pdf.bundle.js"></script>
+
+</head>
+<body>
+    <div class="header">
+        <div class="menu">
+            <h2><button onclick="window.location.href='/'">Home</button></h2>
+            <h2><button onclick="window.location.href='/books'">Books</button></h2>
+            <h2><button onclick="window.location.href='/orders'">Orders</button></h2>
+            <h2><button onclick="window.location.href='/publishers'">Publisher</button></h2>
+            <div class="search-box">
+                <form action="/customers/search" method="get">
+                    <label>Search Customers:</label>
+                    <input type="text" name="query" placeholder="Enter Customer ID">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+<h1 style="text-align: center">Customer Details</h1>
+
+    <a style="text-decoration: none">
+        <button type="button" onclick="downloadPDF()" class="add-customer-button" style="margin: auto">Download Data</button>
+    </a>
+
+    <table  id="customer-table">
+        <thead>
+            <tr>
+                <th>Customer ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for customer in customers %}
+            <tr>
+                <td><a href="/customers/orders/{{ customer[0] }}">{{ customer[0] }}</a></td>
+                <td>{{ customer[1] }}</td>
+                <td>{{ customer[2] }}</td>
+                <td>{{ customer[3] }}</td>
+                <td class="actions-form">
+                    <form action="/customers/update/{{ customer[0] }}" method="get">
+                        <button type="submit">Update</button>
+                    </form>
+                    <form action="/customers/delete/{{ customer[0] }}" method="post">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <form action="/customers/add" method="get">
+        <button type="submit" class="add-customer-button">Add New Customer</button>
+    </form>
+
+<script>
+    function downloadPDF() {
+
+        const clonedTable = document.getElementById('customer-table').cloneNode(true);
+
+
+        const lastColumnHeader = clonedTable.querySelector('thead th:last-child');
+        if (lastColumnHeader) {
+            lastColumnHeader.remove();
+        }
+
+        const rows = clonedTable.querySelectorAll('tbody tr');
+        rows.forEach(row => {
+            const lastCell = row.lastElementChild;
+            if (lastCell) {
+                lastCell.remove();
+            }
+        });
+
+        html2pdf(clonedTable, {
+            filename: 'customers.pdf',
+        });
+    }
+</script>
+</body>
+</html>
